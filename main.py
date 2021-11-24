@@ -93,7 +93,7 @@ def tercerPunto(image,points):
             break;
         if len(points) > point_counter:
             point_counter = len(points)
-            cv2.circle(image_draw, (points[-1][0], points[-1][1]), 10, [255, 0, 255], -1)
+            cv2.circle(image_draw, (points[-1][0], points[-1][1]), 10, [0,255, 255], -1)
     points1.append(points[0])
     points1.append(points[1])
     points2.append(points[2])
@@ -124,7 +124,7 @@ def tercerPunto(image,points):
     # Se encuentra el y para cada x
     y1 = int(m1 * x1 + b1)
     y2 = int(m1 * x2 + b1)
-    cv2.line(image_draw, (x1, y1), (x2, y2), (255, 0, 255), thickness=3, lineType=8)
+    cv2.line(image_draw, (x1, y1), (x2, y2), (0, 255, 255), thickness=3, lineType=8)
 
     cv2.imshow('tercer punto',image_draw)
     cv2.waitKey(0)
