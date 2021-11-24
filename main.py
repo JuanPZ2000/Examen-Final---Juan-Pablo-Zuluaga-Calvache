@@ -27,7 +27,7 @@ def pixelPercentage(image):
     mask = cv2.inRange(image_hsv, inf_limit, sup_limit)
 
     # Como se tiene algunos huecos se puede hacer una erosion
-    kernel = np.ones((6,6),np.uint8)
+    kernel = np.ones((5,5),np.uint8)
     mask_erosion = cv2.erode(mask, kernel, iterations= 1)
 
     zeros = np.count_nonzero(mask_erosion)
@@ -43,19 +43,24 @@ def pixelPercentage(image):
 def segundoPunto(mask, image):
     # Se hace una dilatacion para quitar las lineas del campo
     conta = 0
-    kernel = np.ones((8,8), np.uint8)
+    kernel = np.ones((16,16), np.uint8)
     mask_dilation = cv2.dilate(mask, kernel, iterations=1)
 
+    # Se vuelve a erosionar para que se noten mejor los contornos
+    kernel = np.ones((16,16), np.uint8)
+    mask_erotion = cv2.erode(mask_dilation, kernel, iterations= 1)
+
     # Se encuentran los contornos para contar los jugadores
-    contours, hierarchy = cv2.findContours(mask_dilation, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(mask_erotion, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     image_draw = image.copy()
     for idx, cont in enumerate(contours):
         # Se detecta un contorno que este entre el valor superior e inferior, para evitar contornos muy grandes o muy pequenos
-        if len(contours[idx]) < 350 and len(contours[idx]) > 60:
+        if len(contours[idx]) < 350 and len(contours[idx]) > 21:
             x, y, width, height = cv2.boundingRect(contours[idx])
             cv2.rectangle(image_draw, (x, y), (x + width, y + height), (0, 0, 255), 2)
             # Se suma uno al contador de jugadores
             conta += 1
+
     cv2.imshow('segundo punto', image_draw)
     cv2.waitKey(0)
     print('se detectaron '+str(conta)+' jugadores')
@@ -131,4 +136,4 @@ if __name__ == '__main__':
     image = cv2.imread(path)
     mask = pixelPercentage(image)
     segundoPunto(mask,image)
-    # tercerPunto(image,points)
+    tercerPunto(image,points)
