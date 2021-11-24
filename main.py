@@ -42,7 +42,7 @@ def pixelPercentage(image):
 
 def segundoPunto(mask, image):
     # Se hace una dilatacion para quitar las lineas del campo
-    conta = 0
+    contador = 0
     kernel = np.ones((16,16), np.uint8)
     mask_dilation = cv2.dilate(mask, kernel, iterations=1)
 
@@ -59,11 +59,11 @@ def segundoPunto(mask, image):
             x, y, width, height = cv2.boundingRect(contours[idx])
             cv2.rectangle(image_draw, (x, y), (x + width, y + height), (0, 0, 255), 2)
             # Se suma uno al contador de jugadores
-            conta += 1
+            contador += 1
 
     cv2.imshow('segundo punto', image_draw)
     cv2.waitKey(0)
-    print('se detectaron '+str(conta)+' jugadores')
+    print('se detectaron '+str(contador)+' jugadores')
 
 def tercerPunto(image,points):
     image_draw = np.copy(image)
